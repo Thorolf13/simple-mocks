@@ -1,8 +1,8 @@
-#SimpleMocks
+# SimpleMocks
 
 Ce module a pour but d'offrir la possibilite de mettre en place des mocks facilemnt et rapidement
 
-##Utilisation
+## Utilisation
 
 ```
 start.cmd
@@ -10,8 +10,8 @@ start.cmd
 
 Les moficittion des fichiers sont rechargée a chaud.
 
-##Configuration
-###Fichier config.json
+## Configuration
+### Fichier config.json
 
 ```
 {
@@ -22,8 +22,8 @@ Les moficittion des fichiers sont rechargée a chaud.
 * __port__ : port utilisé
 * __mocks_dir__ : chemin relatif vers le dossier de mocks
 
-###Fichiers mocks
-####Configuration du groupe
+### Fichiers mocks
+#### Configuration du groupe
 ```
 {
     "name": "exemple",
@@ -37,7 +37,7 @@ Les moficittion des fichiers sont rechargée a chaud.
 * __enable__ : groupe de mock activé ou non
 * __mock__ : liste des mocks
 
-####Mock
+#### Mock
 
 La priorité des réponse suit l'ordre de définition. Si la requete satisfait les criteres d'un mock, la réponse est renvoyée. Sinon, les mocks continuent d'etre testés jusqu'a la fin de la liste. Si la requete ne satisfait les criteres d'aucun mocks, une response "501 : Not Implemented" est renvoyé.
 
