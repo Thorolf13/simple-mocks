@@ -20,7 +20,7 @@ app.use(cors());
 //load files
 loadMocks();
 
-//fallover
+//failover
 app.all('*', function(req, res) {
     LOG(logLevel.WARN, "unmatched call : "+req.method+" - "+req.originalUrl);
     // console.log("header : "+JSON.stringify(req.headers));
