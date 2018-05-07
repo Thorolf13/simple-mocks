@@ -13,6 +13,8 @@ Les moficittion des fichiers sont rechargée a chaud.
 ## Configuration
 ### Fichier config.json
 
+[config.json](config.json)
+
 ```json
 {
     "port": 8888,
@@ -23,6 +25,9 @@ Les moficittion des fichiers sont rechargée a chaud.
 * __mocks_dir__ : chemin relatif vers le dossier de mocks
 
 ### Fichiers mocks
+
+[mock_exemple.json](mocks_exemples/exemple1.json)
+
 #### Configuration du groupe
 ```json
 {
@@ -53,7 +58,7 @@ La priorité des réponse suit l'ordre de définition. Si la requete satisfait l
     },
     "pathParams" : {
         "name" : "*"|"string"
-    }    
+    },
     "response": {
         "code": 200,
         "headers" : {
@@ -66,7 +71,7 @@ La priorité des réponse suit l'ordre de définition. Si la requete satisfait l
 
 * __url__ : url du WS. la syntaxe ":path_params_name" peut etre utilisée comme wildcard. l'url finale du mock est `<host>:<port>/<baseurl>/<url>`
 * __method__ : methode http `get|post|put|delete|patch...`
-* __headers__ : liste de headers a verifier. "\*" peut etre utlisé comme wildcard, la présence du chaps est alors vérifiée, sans controle de sa valeur.
+* __headers__ : liste de headers a verifier. `\*` peut etre utlisé comme wildcard, la présence du chaps est alors vérifiée, sans controle de sa valeur.
 * __queryParams__ : identique a __headers__ pour les queryParams
 * __pathParams__ : identique a __headers__ pour les paths params
 * __response__ : réponse a renvoyer si le requete correspond aux criteres
