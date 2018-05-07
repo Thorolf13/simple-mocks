@@ -1,0 +1,4 @@
+{
+    "port": 8888,
+    "mocks_dir": "./mocks_exemples"
+}

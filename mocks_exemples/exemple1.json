@@ -1,0 +1,83 @@
+{
+    "name": "exemple",
+    "baseUrl": "exemple/rest",
+    "enable": true,
+    "mock": [{
+            "url": "authentification/connexion",
+            "method": "post",
+            "response": {
+                "code": 200,
+                "body": {
+                    "token": "mon_token"
+                }
+            }
+        },
+        {
+            "___commentaire___": "avec token spécifique",
+            "url": "authentification/profil",
+            "method": "get",
+            "headers": {
+                "Authorization": "Token mon_token"
+            },
+            "response": {
+                "code": 200,
+                "body": {
+                    "cheptel": "FR00000001",
+                    "identifiant": "mon_id",
+                    "droits": [
+                        "CONSULTATION",
+                        "ADMINISTRATION",
+                        "MODIFICATION"
+                    ]
+                }
+            }
+        },
+        {
+            "___commentaire___": "avec un token, réponse string",
+            "url": "authentification/profil",
+            "method": "get",
+            "headers": {
+                "Authorization": "*"
+            },
+            "response": {
+                "code": 403,
+                "body": "Forbidden"
+            }
+        },
+        {
+            "___commentaire___": "sans token",
+            "url": "authentification/profil",
+            "method": "get",
+            "response": {
+                "code": 401,
+                "body": null
+            }
+        },
+        {
+            "___commentaire___": "requete avec query params (codepays=FR et race présent, mais sans valeure definie) et path params et reponse dans un fichier externe",
+            "url": "exploitations/:id_exploitation/animaux",
+            "method": "get",
+            "queryParams": {
+                "codePays": "FR",
+                "race": "*"
+            },
+            "response": {
+                "code": 200,
+                "body": "file://data/liste_animaux_FR_avec_race.json"
+            }
+        },
+        {
+            "___commentaire___": "réponse avec headers",
+            "url": "exploitations/:id_exploitation/animaux",
+            "method": "get",
+            "response": {
+                "code": 200,
+                "headers": {
+                    "Content-Range": "0-4/5",
+                    "Accept-Range": "100"
+                },
+                "body": "file://data/liste_animaux.json"
+            }
+        }
+    ]
+}
