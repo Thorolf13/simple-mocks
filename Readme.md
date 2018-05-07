@@ -5,10 +5,10 @@ Ce module a pour but d'offrir la possibilite de mettre en place des mocks facile
 ## Utilisation
 
 ```cmd
-start.cmd
+node app.js
 ```
 
-Les moficittion des fichiers sont rechargée a chaud.
+Les moficittions des fichiers mocks sont rechargées a chaud.
 
 ## Configuration
 ### Fichier config.json

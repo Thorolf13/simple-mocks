@@ -67,9 +67,12 @@
             }
         },
         {
-            "___commentaire___": "réponse avec headers",
+            "___commentaire___": "réponse avec headers, verification des pathParams",
             "url": "exploitations/:id_exploitation/animaux",
             "method": "get",
+            "pathParams": {
+                "id_exploitation": "FR00000001"
+            },
             "response": {
                 "code": 200,
                 "headers": {
