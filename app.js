@@ -8,9 +8,41 @@ const path = require('path');
 
 //const
 const logLevel = {
-    INFO: "INFO",
-    WARN: "WARN",
-    ERROR: "ERROR"
+    DEBUG: { label: "DEBUG", order: 1, colorCode: 'FgDarkGray'},
+    INFO: { label: "INFO", order: 2, colorCode: 'FgLighGray'},
+    WARN: { label: "WARN", order: 3, colorCode: 'FgYellow'},
+    ERROR: { label: "ERROR", order: 4, colorCode: 'FgRed'},
+    GLOBAL: { label: "GLOBAL", order: 100, colorCode: 'FgGreen'}
+}
+
+const cliColors = {
+    Reset : "\x1b[0m",
+    Bright : "\x1b[1m",
+    Dim : "\x1b[2m",
+    Underscore : "\x1b[4m",
+    Blink : "\x1b[5m",
+    Reverse : "\x1b[7m",
+    Hidden : "\x1b[8m",
+
+    FgBlack : "\x1b[30m",
+    FgRed : "\x1b[31m",
+    FgGreen : "\x1b[32m",
+    FgYellow : "\x1b[33m",
+    FgBlue : "\x1b[34m",
+    FgMagenta : "\x1b[35m",
+    FgCyan : "\x1b[36m",
+    FgLighGray : "\x1b[37m",
+    FgDarkGray : "\x1b[90m",
+    FgWhite : "\x1b[97m",
+
+    BgBlack : "\x1b[40m",
+    BgRed : "\x1b[41m",
+    BgGreen : "\x1b[42m",
+    BgYellow : "\x1b[43m",
+    BgBlue : "\x1b[44m",
+    BgMagenta : "\x1b[45m",
+    BgCyan : "\x1b[46m",
+    BgWhite : "\x1b[47m"
 }
 
 //config
@@ -24,7 +56,7 @@ var server = loadServer();
 
 //reload if config change
 fs.watch(global_config.mocks_dir, {recursive:true}, debounce(function(event, file) {
-    LOG(logLevel.INFO, "reload server due to ["+event+"], file : "+ JSON.stringify(file));
+    LOG(logLevel.GLOBAL, "reload server due to ["+event+"], file : "+ JSON.stringify(file));
     console.log(" ");
     if (server && server.close) {
         server.close();
@@ -89,27 +121,24 @@ function loadServer() {
         res.status(501).send();
     });
 
-    console.log("---");
-
     //start server
     return startServer();
 }
 
 function startServer() {
     return app.listen(global_config.port, function() {
-        LOG(logLevel.INFO, "started, listening on " + global_config.port);
-        console.log(" ");
+        LOG(logLevel.GLOBAL, "started, listening on " + global_config.port);
     });
 }
 
 function loadMocks() {
-    LOG(logLevel.INFO, "read mocks in " + global_config.mocks_dir);
+    LOG(logLevel.DEBUG, "read mocks in " + global_config.mocks_dir);
     var files = fs.readdirSync(global_config.mocks_dir)
     files.forEach(file => {
         var filePath = global_config.mocks_dir + "/" + file;
 
         if (fs.lstatSync(filePath).isFile()) {
-            LOG(logLevel.INFO, "read file " + filePath);
+            LOG(logLevel.DEBUG, "read file " + filePath);
             var config = require(filePath);
             loadMock(config);
         }
@@ -153,10 +182,10 @@ function loadMock(mock_config) {
                     }
 
                     LOG(logLevel.INFO, "receive : " + req.method + " - " + req.originalUrl + " | response : " + route.response.code);
-                    // console.log("params : "+JSON.stringify(req.params));
-                    // console.log("query : "+JSON.stringify(req.query));
-                    // console.log("header : "+JSON.stringify(req.headers));
-                    // console.log("body : "+JSON.stringify(req.body));
+                    LOG(logLevel.DEBUG,"request headers : "+JSON.stringify(req.headers));
+                    LOG(logLevel.DEBUG,"request pathParams : "+JSON.stringify(req.params));
+                    LOG(logLevel.DEBUG,"request queryParams : "+JSON.stringify(req.query));
+                    LOG(logLevel.DEBUG,"request body : "+JSON.stringify(req.body));
 
 
                     if (route.response.headers) {
@@ -166,10 +195,12 @@ function loadMock(mock_config) {
                     var body = route.response.body;
                     if (typeof body == 'string' && body.indexOf('file://') == 0) {
                         var filePath = global_config.mocks_dir + '/' + body.slice(7);
-                        LOG(logLevel.INFO, "load response body from '" + filePath + "'");
+                        LOG(logLevel.DEBUG, "response code : "+route.response.code+", response body from '" + filePath + "'");
+
                         res.status(route.response.code || 200).sendFile(path.resolve(filePath));
                     }
                     else {
+                        LOG(logLevel.DEBUG, "response code : "+route.response.code+", response body '" + JSON.stringify(body) + "'");
                         res.status(route.response.code || 200).send(body);
                     }
                 };
@@ -178,7 +209,7 @@ function loadMock(mock_config) {
             LOG(logLevel.INFO, "    " + padRight(route.method.toUpperCase(), 6) + " - /" + mock_config.baseUrl + '/' + route.url + " | response : " + route.response.code);
         }
     } else {
-        LOG(logLevel.INFO, "mock '" + mock_config.name + "' disabled");
+        LOG(logLevel.DEBUG, "mock '" + mock_config.name + "' disabled");
     }
 }
 
@@ -192,5 +223,11 @@ function padRight(str, length, char) {
 }
 
 function LOG(level, message) {
-    console.log("[" + (new Date().toLocaleString()) + "] " + level + " : " + message);
+    if( level.order < logLevel[global_config.log_level].order){
+        return;
+    }
+
+    var color = cliColors[level.colorCode] || cliColors.Reset;
+
+    console.log(color+"[" + (new Date().toLocaleString()) + "] " + level.label + " : " + message + cliColors.Reset);
 }

@@ -6,7 +6,7 @@ Ce module a pour but d'offrir la possibilite de mettre en place des mocks facile
 
 ```cmd
 npm install
-node app.js
+node .
 ```
 
 Les moficittions des fichiers mocks sont rechargées a chaud.
@@ -19,11 +19,13 @@ Les moficittions des fichiers mocks sont rechargées a chaud.
 ```json
 {
     "port": 8888,
-    "mocks_dir": "./mocks"
+    "mocks_dir": "./mocks",
+    "log_level": "INFO"
 }
 ```
 * __port__ : port utilisé
 * __mocks_dir__ : chemin relatif vers le dossier de mocks
+* __log_level__ : niveau de log `DEBUG|INFO|WARN|ERROR`
 
 ### Fichiers mocks
 

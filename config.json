@@ -1,4 +1,6 @@
 {
     "port": 8888,
     "mocks_dir": "./mocks_exemples"
+    "mocks_dir": "./mocks_exemples",
+    "log_level": "INFO"
 }
