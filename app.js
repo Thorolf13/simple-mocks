@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express();
 const fs = require('fs');
 const process = require('process');
+const path = require('path');
 
 //const
 const logLevel = {
@@ -166,10 +167,11 @@ function loadMock(mock_config) {
                     if (typeof body == 'string' && body.indexOf('file://') == 0) {
                         var filePath = global_config.mocks_dir + '/' + body.slice(7);
                         LOG(logLevel.INFO, "load response body from '" + filePath + "'");
-                        body = require(filePath);
+                        res.status(route.response.code || 200).sendFile(path.resolve(filePath));
                     }
-
-                    res.status(route.response.code || 200).send(body);
+                    else {
+                        res.status(route.response.code || 200).send(body);
+                    }
                 };
             })(route));
 
