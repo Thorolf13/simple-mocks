@@ -5,6 +5,7 @@ Ce module a pour but d'offrir la possibilite de mettre en place des mocks facile
 ## Utilisation
 
 ```cmd
+npm install
 node app.js
 ```
 
