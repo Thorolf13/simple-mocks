@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 var ignoredHeader = [
-    "Date","X-Powered-By","Content-Length","Connection"
+    "Date","X-Powered-By","Content-Length","Connection","Expires"
 ];
 
 function parse(filePath, options){
