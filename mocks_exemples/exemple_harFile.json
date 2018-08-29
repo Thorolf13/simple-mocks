@@ -1,0 +1,20 @@
+{
+    "___commentaire___" : "exemple de configuration qui genere des route mock a partir d'un fichier har issu de google Chrome",
+    "name": "Exemple mock har",
+    "baseUrl": "exemple_har/rest",
+    "enable": true,
+    "har" : [
+        {
+            "filePath" : "data/assemblage.har.json",
+            "options" : {
+                "filter" : [
+                    "sa-certification",
+                    "authentification"
+                ],
+                "queryParams" :{
+                    "ignore" : ["rand","date"]
+                }
+            }
+        }
+    ]
+}

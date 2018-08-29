@@ -5,6 +5,10 @@ const app = express();
 const fs = require('fs');
 const process = require('process');
 const path = require('path');
+const url = require('url');
+const https = require('https');
+
+const harParser = require('./harParser.js')
 
 //const
 const logLevel = {
@@ -114,15 +118,17 @@ function loadServer() {
     loadMocks();
 
     //failover
-    app.all('*', function(req, res) {
-        LOG(logLevel.WARN, "unmatched call : " + req.method + " - " + req.originalUrl);
-        // console.log("header : "+JSON.stringify(req.headers));
-        // console.log("body : "+JSON.stringify(req.body));
-        res.status(501).send();
-    });
+    app.all('*', failover);
 
     //start server
     return startServer();
+}
+
+function failover(req, res) {
+    LOG(logLevel.WARN, "unmatched call : " + req.method + " - " + req.originalUrl);
+    // console.log("header : "+JSON.stringify(req.headers));
+    // console.log("body : "+JSON.stringify(req.body));
+    res.status(501).send();
 }
 
 function startServer() {
@@ -135,6 +141,9 @@ function loadMocks() {
     LOG(logLevel.DEBUG, "read mocks in " + global_config.mocks_dir);
     var files = fs.readdirSync(global_config.mocks_dir)
     files.forEach(file => {
+        if( !/\.json$/.test(file) ){
+            return;
+        }
         var filePath = global_config.mocks_dir + "/" + file;
 
         if (fs.lstatSync(filePath).isFile()) {
@@ -149,8 +158,22 @@ function loadMock(mock_config) {
     if (mock_config.enable !== false) {
         LOG(logLevel.INFO, "load mock : '" + mock_config.name + "'");
 
-        for (var j in mock_config.mock) {
-            var route = mock_config.mock[j];
+        if( mock_config.har && !mock_config.mock ){
+            mock_config.mock = [];
+        }
+
+        var mocks = [].concat(mock_config.mock);
+
+        for( var j in mock_config.har ){
+            var har_config = mock_config.har[j];
+            var harFilePath = global_config.mocks_dir + "/" + har_config.filePath;
+            var harRoutes = harParser.parse(harFilePath, har_config.options);
+
+            mocks = mocks.concat(harRoutes);
+        }
+
+        for (var j in mocks) {
+            var route = mocks[j];
 
             app[route.method.toLowerCase()]("/" + mock_config.baseUrl + '/' + route.url, (function(route) {
                 return function(req, res, next) {
@@ -206,7 +229,15 @@ function loadMock(mock_config) {
                 };
             })(route));
 
-            LOG(logLevel.INFO, "    " + padRight(route.method.toUpperCase(), 6) + " - /" + mock_config.baseUrl + '/' + route.url + " | response : " + route.response.code);
+            var queryParams = [];
+            if( route.queryParams ){
+                for( var key in route.queryParams ){
+                    queryParams.push(key+"="+route.queryParams[key]);
+                }
+            }
+            var queryParamsString = queryParams.length ? "?"+queryParams.join("&") : ""
+
+            LOG(logLevel.INFO, "    " + padRight(route.method.toUpperCase(), 6) + " - /" + mock_config.baseUrl + '/' + route.url + queryParamsString +" | response : " + route.response.code);
         }
     } else {
         LOG(logLevel.DEBUG, "mock '" + mock_config.name + "' disabled");

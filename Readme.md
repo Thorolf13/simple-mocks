@@ -37,7 +37,8 @@ Les moficittions des fichiers mocks sont rechargées a chaud.
     "name": "exemple",
     "baseUrl": "exemple/rest",
     "enable": true,
-    "mock": []
+    "mock": [],
+    "har" : []
 }
 ```
 * __name__ : nom du groupe de mock
@@ -81,3 +82,33 @@ La priorité des réponse suit l'ordre de définition. Si la requete satisfait l
     * __code__ : code http
     * __headers__ : liste des headers
     * __body__ : corps de la réponse. renseigner `null` ou omettre pour une reponse vide. Peut etre une chaine de carateres ou un objet. Si la valeur est un chaine de carateres commencant par `file://`, renvoi le contenu du fichier spécifié (chemin relatif)
+
+#### Har
+Permet de generer des routes a partir d'un fichier `*.har` issu de Google Chrome.
+Utile pour rejouer un cas test.
+
+```json
+{
+    "filePath" : "string",
+    "options" : {
+        "filter" : "string[]"|"string",
+        "queryParams" :{
+            "ignore" : ["string"]
+        }
+    }
+}
+```
+* __filePath__ : chemin vers le fichier HAR
+* __options__ : options pour le parsing du fichier
+    * __filter__ : filtre sur les urls presentes dans le fichier HAR. les valeur sont gérées comme des expressions régulières. Si l'url valide un seul filtre, elle est inclut dans le mock
+    * __queryParams__ : option sur les query params
+        * __ignore__ : liste des query params a ignorer. Par défaut, tous les query params devront etres identique pour que l'appel match le mock. Si il y a des query params avec a date courante ou une valeur aleatoire, il peut etre utile de les ignorer
+
+Pour generer le fichier har :
+* Ouvrir la console debug de Chrome
+* Se placer dans l'onglet 'Network'
+* Cocher la case 'Preserve log'
+* Se Placer dans l'etat de debut du scenario de test (avant connexion/intialisation)
+* Jouer un scenario
+* Une fois fini, faire un clic droit sur l'une des lignes du log network et cliquer sur 'Save as HAR with content'
+* Ajouter une extension `.json` au fichier
