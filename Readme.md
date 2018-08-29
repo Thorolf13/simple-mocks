@@ -87,7 +87,7 @@ La priorité des réponse suit l'ordre de définition. Si la requete satisfait l
     * __body__ : corps de la réponse. renseigner `null` ou omettre pour une reponse vide. Peut etre une chaine de carateres ou un objet. Si la valeur est un chaine de carateres commencant par `file://`, renvoi le contenu du fichier spécifié (chemin relatif)
 
 #### Har
-Permet de generer des routes a partir d'un fichier `*.har` issu de Google Chrome.
+Permet de generer des mocks a partir d'un fichier `*.har` issu de Google Chrome.
 Utile pour rejouer un cas test.
 
 Le domaine présent dans les url du fichier HAR sera supprimé et remplacé par la `baseUrl` du fichier de configuration.
@@ -117,4 +117,3 @@ Pour generer le fichier har :
 * Clic sur le bouton 'Clear'
 * Jouer un scenario
 * Une fois fini, faire un clic droit sur l'une des lignes du log network et cliquer sur 'Save as HAR with content'
-* Ajouter une extension `.json` au fichier

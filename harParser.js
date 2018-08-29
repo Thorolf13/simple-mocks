@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 var ignoredHeader = [
     "Date","X-Powered-By","Content-Length","Connection"
 ];
@@ -5,7 +7,7 @@ var ignoredHeader = [
 function parse(filePath, options){
     options = options || {};
 
-    var har = require(filePath);
+    var har = requireJSON(filePath);
 
     var mocks = [];
 
@@ -83,6 +85,8 @@ function inFilter(value, filter){
     return true;
 }
 
-
+var requireJSON = function (filePath) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+};
 
 module.exports = { parse : parse };

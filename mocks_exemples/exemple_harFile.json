@@ -5,7 +5,7 @@
     "enable": true,
     "har" : [
         {
-            "filePath" : "data/assemblage.har.json",
+            "filePath" : "data/assemblage.har",
             "options" : {
                 "filter" : [
                     "sa-certification",

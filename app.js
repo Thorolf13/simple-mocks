@@ -167,7 +167,14 @@ function loadMock(mock_config) {
         for( var j in mock_config.har ){
             var har_config = mock_config.har[j];
             var harFilePath = global_config.mocks_dir + "/" + har_config.filePath;
-            var harRoutes = harParser.parse(harFilePath, har_config.options);
+            try{
+                var harRoutes = harParser.parse(harFilePath, har_config.options);
+            }
+            catch(e){
+                LOG(logLevel.ERROR, "Error when load HAR file : "+harFilePath);
+                LOG(logLevel.ERROR, e);
+                continue;
+            }
 
             mocks = mocks.concat(harRoutes);
         }
