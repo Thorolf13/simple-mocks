@@ -114,6 +114,7 @@ Pour generer le fichier har :
 * Se placer dans l'onglet 'Network'
 * Cocher la case 'Preserve log'
 * Se Placer dans l'etat de debut du scenario de test (avant connexion/intialisation)
+* Clic sur le bouton 'Clear'
 * Jouer un scenario
 * Une fois fini, faire un clic droit sur l'une des lignes du log network et cliquer sur 'Save as HAR with content'
 * Ajouter une extension `.json` au fichier
