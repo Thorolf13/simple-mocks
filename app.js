@@ -148,7 +148,7 @@ function loadMocks() {
 
         if (fs.lstatSync(filePath).isFile()) {
             LOG(logLevel.DEBUG, "read file " + filePath);
-            var config = require(filePath);
+            var config = requireJSON(filePath);
             loadMock(config);
         }
     });
@@ -268,4 +268,8 @@ function LOG(level, message) {
     var color = cliColors[level.colorCode] || cliColors.Reset;
 
     console.log(color+"[" + (new Date().toLocaleString()) + "] " + level.label + " : " + message + cliColors.Reset);
+}
+
+function requireJSON(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
 }

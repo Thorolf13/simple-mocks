@@ -85,8 +85,8 @@ function inFilter(value, filter){
     return true;
 }
 
-var requireJSON = function (filePath) {
+function requireJSON(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
-};
+}
 
 module.exports = { parse : parse };
