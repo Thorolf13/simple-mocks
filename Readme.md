@@ -90,6 +90,8 @@ La priorité des réponse suit l'ordre de définition. Si la requete satisfait l
 Permet de generer des routes a partir d'un fichier `*.har` issu de Google Chrome.
 Utile pour rejouer un cas test.
 
+Le domaine présent dans les url du fichier HAR sera supprimé et remplacé par la `baseUrl` du fichier de configuration.
+
 ```json
 {
     "filePath" : "string",
