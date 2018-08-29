@@ -1,7 +1,6 @@
 //imports
 const express = require('express');
 const cors = require('cors');
-const app = express();
 const fs = require('fs');
 const process = require('process');
 const path = require('path');
@@ -53,7 +52,7 @@ const cliColors = {
 var global_config = require('./config.json');
 
 //app
-app.use(cors());
+var app;
 
 //start server
 var server = loadServer();
@@ -114,6 +113,9 @@ var hash = function(s) {
 };
 
 function loadServer() {
+    app = express();
+    app.use(cors());
+
     //load files
     loadMocks();
 
