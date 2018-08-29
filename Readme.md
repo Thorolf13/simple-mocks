@@ -30,8 +30,8 @@ Les moficittions des fichiers mocks sont rechargées a chaud.
 
 ### Fichiers mocks
 
-[mock_exemple.json](mocks_exemples/exemple1.json)
-[mock_exemple_fichier_har.json](mocks_exemples/exemple_harFile.json)
+* [mock_exemple.json](mocks_exemples/exemple1.json)
+* [mock_exemple_fichier_har.json](mocks_exemples/exemple_harFile.json)
 
 #### Configuration du groupe
 ```json
