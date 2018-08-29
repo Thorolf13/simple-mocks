@@ -1,6 +1,7 @@
 # SimpleMocks
 
-Ce module a pour but d'offrir la possibilite de mettre en place des mocks facilemnt et rapidement
+Ce module a pour but d'offrir la possibilite de mettre en place des mocks facilemnt et rapidement.
+Il offre la possibilite de définir des mocks via des fichiers json ou a partir d'un fichier de log reseau provenant de Google Chrome (fichiers HAR).
 
 ## Utilisation
 
@@ -30,6 +31,7 @@ Les moficittions des fichiers mocks sont rechargées a chaud.
 ### Fichiers mocks
 
 [mock_exemple.json](mocks_exemples/exemple1.json)
+[mock_exemple_fichier_har.json](mocks_exemples/exemple_harFile.json)
 
 #### Configuration du groupe
 ```json
@@ -45,6 +47,7 @@ Les moficittions des fichiers mocks sont rechargées a chaud.
 * __baseUrl__ : base de l'url pour ce groupe de mock
 * __enable__ : groupe de mock activé ou non
 * __mock__ : liste des mocks
+* __har__ : liste des fichiers HAR a charger
 
 #### Mock
 
@@ -98,7 +101,7 @@ Utile pour rejouer un cas test.
     }
 }
 ```
-* __filePath__ : chemin vers le fichier HAR
+* __filePath__ : chemin relatif vers le fichier HAR
 * __options__ : options pour le parsing du fichier
     * __filter__ : filtre sur les urls presentes dans le fichier HAR. les valeur sont gérées comme des expressions régulières. Si l'url valide un seul filtre, elle est inclut dans le mock
     * __queryParams__ : option sur les query params
