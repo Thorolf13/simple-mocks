@@ -232,7 +232,7 @@ function loadMock(mock_config) {
                         res.status(route.response.code || 200).sendFile(path.resolve(filePath));
                     }
                     else {
-                        LOG(logLevel.DEBUG, "response code : "+route.response.code+", response body '" + JSON.stringify(body) + "'");
+                        LOG(logLevel.DEBUG, "response code : "+route.response.code+", response body '" + typeof body == "object" ? JSON.stringify(body) : body+ "'");
                         res.status(route.response.code || 200).send(body);
                     }
                 };
