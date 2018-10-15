@@ -1,6 +1,6 @@
 # SimpleMocks
 
-Ce module a pour but d'offrir la possibilite de mettre en place des mocks facilemnt et rapidement.
+Ce module a pour but d'offrir la possibilite de mettre en place des mocks facilement et rapidement.
 Il offre la possibilite de définir des mocks via des fichiers json ou a partir d'un fichier de log reseau provenant de Google Chrome (fichiers HAR).
 
 ## Utilisation
@@ -96,7 +96,7 @@ Le domaine présent dans les url du fichier HAR sera supprimé et remplacé par 
 {
     "filePath" : "string",
     "options" : {
-        "filter" : "string[]"|"string",
+        "filter" : ["string"]|"string",
         "queryParams" :{
             "ignore" : ["string"]
         }
