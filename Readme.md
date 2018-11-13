@@ -39,6 +39,11 @@ Les moficittions des fichiers mocks sont rechargées a chaud.
     "name": "exemple",
     "baseUrl": "exemple/rest",
     "enable": true,
+    "cors" : {
+        "Access-Control-Allow-Headers" : "*",
+        "Access-Control-Expose-Headers" : "*",
+        "Access-Control-Allow-Origin" : "*"
+    },
     "mock": [],
     "har" : []
 }
@@ -46,6 +51,7 @@ Les moficittions des fichiers mocks sont rechargées a chaud.
 * __name__ : nom du groupe de mock
 * __baseUrl__ : base de l'url pour ce groupe de mock
 * __enable__ : groupe de mock activé ou non
+* __cors__ : liste des valeurs CORS renvoyées en tant que headers dans chaque réponse
 * __mock__ : liste des mocks
 * __har__ : liste des fichiers HAR a charger
 

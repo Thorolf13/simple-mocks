@@ -169,7 +169,9 @@ function loadMock(mock_config) {
         for( var j in mock_config.har ){
             var har_config = mock_config.har[j];
             var harFilePath = global_config.mocks_dir + "/" + har_config.filePath;
+
             try{
+                LOG(logLevel.DEBUG, "read file " + harFilePath);
                 var harRoutes = harParser.parse(harFilePath, har_config.options);
             }
             catch(e){
@@ -188,7 +190,7 @@ function loadMock(mock_config) {
                 return function(req, res, next) {
                     if (route.headers) {
                         for (var key in route.headers) {
-                            if ((route.headers[key] != "*" && req.get(key) != route.headers[key]) || (route.headers[key] == "*" && req.get(key) == "")) {
+                            if ((route.headers[key] != "*" && req.get(key) != route.headers[key]) || (route.headers[key] == "*" && !req.get(key))) {
                                 next();
                                 return;
                             }
@@ -197,7 +199,7 @@ function loadMock(mock_config) {
 
                     if (route.pathParams) {
                         for (var key in route.pathParams) {
-                            if ((route.pathParams[key] != "*" && req.params[key] != route.pathParams[key]) || (route.pathParams[key] == "*" && req.params[key] == "")) {
+                            if ((route.pathParams[key] != "*" && req.params[key] != route.pathParams[key]) || (route.pathParams[key] == "*" && !req.params[key])) {
                                 next();
                                 return;
                             }
@@ -206,7 +208,7 @@ function loadMock(mock_config) {
 
                     if (route.queryParams) {
                         for (var key in route.queryParams) {
-                            if ((route.queryParams[key] != "*" && req.query[key] != route.queryParams[key]) || (route.queryParams[key] == "*" && req.query[key] == "")) {
+                            if ((route.queryParams[key] != "*" && req.query[key] != route.queryParams[key]) || (route.queryParams[key] == "*" && !req.query[key])) {
                                 next();
                                 return;
                             }
@@ -220,8 +222,13 @@ function loadMock(mock_config) {
                     LOG(logLevel.DEBUG,"request body : "+JSON.stringify(req.body));
 
 
-                    if (route.response.headers) {
-                        res.set(route.response.headers);
+                    var headers = route.response.headers || {};
+                    var cors = mock_config.cors || {};
+
+                    var responseHeaders =  Object.assign({},headers, cors);
+
+                    if (Object.keys(responseHeaders).length ) {
+                        res.set(responseHeaders);
                     }
 
                     var body = route.response.body;
@@ -232,7 +239,7 @@ function loadMock(mock_config) {
                         res.status(route.response.code || 200).sendFile(path.resolve(filePath));
                     }
                     else {
-                        LOG(logLevel.DEBUG, "response code : "+route.response.code+", response body '" + typeof body == "object" ? JSON.stringify(body) : body+ "'");
+                        LOG(logLevel.DEBUG, "response code : "+route.response.code+", response body '" +(typeof body == "string" ? body : JSON.stringify(body))+ "'");
                         res.status(route.response.code || 200).send(body);
                     }
                 };
@@ -247,6 +254,10 @@ function loadMock(mock_config) {
             var queryParamsString = queryParams.length ? "?"+queryParams.join("&") : ""
 
             LOG(logLevel.INFO, "    " + padRight(route.method.toUpperCase(), 6) + " - /" + mock_config.baseUrl + '/' + route.url + queryParamsString +" | response : " + route.response.code);
+			if( route.pathParams )
+				LOG(logLevel.DEBUG, "    " + "pathParams : " + Object.keys(route.pathParams).map(key=>":"+key+"="+route.pathParams[key]).join(","));
+			if( route.headers )
+				LOG(logLevel.DEBUG, "    " + "headers : " + Object.keys(route.headers).map(key=>key+"="+route.headers[key]).join(","));
         }
     } else {
         LOG(logLevel.DEBUG, "mock '" + mock_config.name + "' disabled");
