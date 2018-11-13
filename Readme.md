@@ -78,19 +78,21 @@ La priorité des réponse suit l'ordre de définition. Si la requete satisfait l
 
 * __url__ : url du WS. la syntaxe `:path_params_name` peut etre utilisée comme wildcard. l'url finale du mock est `<host>:<port>/<baseurl>/<url>`
 * __method__ : methode http `get|post|put|delete|patch...`
-* __headers__ : liste de headers a verifier. `*` peut etre utlisé comme wildcard, la présence du chaps est alors vérifiée, sans controle de sa valeur.
-* __queryParams__ : identique a __headers__ pour les queryParams
-* __pathParams__ : identique a __headers__ pour les paths params
+* __headers__ : _facultatif_ liste de headers a verifier. `*` peut etre utlisé comme wildcard, la présence du chaps est alors vérifiée, sans controle de sa valeur.
+* __queryParams__ : _facultatif_ identique a __headers__ pour les queryParams
+* __pathParams__ : _facultatif_ identique a __headers__ pour les paths params
 * __response__ : réponse a renvoyer si le requete correspond aux criteres
     * __code__ : code http
-    * __headers__ : liste des headers
-    * __body__ : corps de la réponse. renseigner `null` ou omettre pour une reponse vide. Peut etre une chaine de carateres ou un objet. Si la valeur est un chaine de carateres commencant par `file://`, renvoi le contenu du fichier spécifié (chemin relatif)
+    * __headers__ : _facultatif_ liste des headers
+    * __body__ : _facultatif_ corps de la réponse. renseigner `null` ou omettre pour une reponse vide. Peut etre une chaine de carateres ou un objet. Si la valeur est un chaine de carateres commencant par `file://`, renvoi le contenu du fichier spécifié (chemin relatif)
 
 #### Har
 Permet de generer des mocks a partir d'un fichier `*.har` issu de Google Chrome.
 Utile pour rejouer un cas test.
 
 Le domaine présent dans les url du fichier HAR sera supprimé et remplacé par la `baseUrl` du fichier de configuration.
+
+Les entrées du fichier HAR sont prise en compte dans l'ordre inverse : du plus recent au plus ancient.
 
 ```json
 {
@@ -104,9 +106,9 @@ Le domaine présent dans les url du fichier HAR sera supprimé et remplacé par 
 }
 ```
 * __filePath__ : chemin relatif vers le fichier HAR
-* __options__ : options pour le parsing du fichier
-    * __filter__ : filtre sur les urls presentes dans le fichier HAR. les valeur sont gérées comme des expressions régulières. Si l'url valide un seul filtre, elle est inclut dans le mock
-    * __queryParams__ : option sur les query params
+* __options__ : _facultatif_ options pour le parsing du fichier
+    * __filter__ : _facultatif_ filtre sur les urls presentes dans le fichier HAR. les valeur sont gérées comme des expressions régulières. Si l'url valide un seul filtre, elle est inclut dans le mock
+    * __queryParams__ : _facultatif_ option sur les query params
         * __ignore__ : liste des query params a ignorer. Par défaut, tous les query params devront etres identique pour que l'appel match le mock. Si il y a des query params avec a date courante ou une valeur aleatoire, il peut etre utile de les ignorer
 
 Pour generer le fichier har :
