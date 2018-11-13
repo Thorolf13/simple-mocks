@@ -11,7 +11,7 @@ function parse(filePath, options){
 
     var mocks = [];
 
-    for( var i in har.log.entries ){
+    for( var i=har.log.entries.length-1 ; i>= 0 ; i-- ){
         var entry = har.log.entries[i];
         var mock = {
             response : {
