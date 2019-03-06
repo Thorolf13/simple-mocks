@@ -72,28 +72,30 @@ const cliColors = {
     BgWhite: "\x1b[47m"
 }
 
-//config
-var global_config = require('./config.json');
+var global_config, app, server;
 
-//app
-var app;
+export function mockServer(config) {
 
-//start server
-var server = loadServer();
+    //config
+    global_config = config;
 
-//reload if config change
-fs.watch(global_config.mocks_dir, {
-    recursive: true
-}, debounce(function(event, file) {
-    LOG(logLevel.GLOBAL, "reload server due to [" + event + "], file : " + JSON.stringify(file));
-    console.log(" ");
-    if (server && server.close) {
-        server.close();
-    }
-
+    //start server
     server = loadServer();
-}, 500));
 
+    //reload if config change
+    fs.watch(global_config.mocks_dir, {
+        recursive: true
+    }, debounce(function(event, file) {
+        LOG(logLevel.GLOBAL, "reload server due to [" + event + "], file : " + JSON.stringify(file));
+        console.log(" ");
+        if (server && server.close) {
+            server.close();
+        }
+
+        server = loadServer();
+    }, 500));
+
+}
 
 
 
