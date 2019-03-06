@@ -3,14 +3,42 @@
 Ce module a pour but d'offrir la possibilite de mettre en place des mocks facilement et rapidement.
 Il offre la possibilite de définir des mocks via des fichiers json ou a partir d'un fichier de log reseau provenant de Google Chrome (fichiers HAR).
 
+Les moficittions des fichiers mocks sont rechargées a chaud.
+
 ## Utilisation
+
+### Standalone
 
 ```cmd
 npm install
 node .
 ```
 
-Les moficittions des fichiers mocks sont rechargées a chaud.
+### As dependency
+
+```cmd
+npm install -D git+ssh://git@gitlab.adventiel.com:raphael.hue/SimpleMocks.git
+```
+
+Editez le fichier `package.json` de votre projet comme suit :
+
+```json
+{
+    "scripts" : {
+        "mocks" : "node_modules/.bin/mocks"
+    }
+}
+```
+
+Lancez le server de mock avec la commande :
+```cmd
+npm run mocks
+```
+
+#### Configuration
+
+La configuration par défaut peut etre surchargée `mocks.json` a la racine du projet
+La synthaxe est la même que le fichier [config.json](config.json)
 
 ## Configuration
 ### Fichier config.json
@@ -19,9 +47,9 @@ Les moficittions des fichiers mocks sont rechargées a chaud.
 
 ```json
 {
-    "port": 8888,
+    "port": 8080,
     "mocks_dir": "./mocks",
-    "log_level": "INFO"
+    "log_level": "DEBUG"
 }
 ```
 * __port__ : port utilisé
