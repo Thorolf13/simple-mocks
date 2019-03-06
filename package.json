@@ -1,6 +1,6 @@
 {
     "name": "ws-mock",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "",
     "main": "app.js",
     "scripts": {
@@ -13,6 +13,6 @@
         "express": "^4.16.2"
     },
     "bin" :{
-        "mocks":"./app.js"
+        "mocks":"./cli.js"
     }
 }

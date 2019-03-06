@@ -1,6 +1,4 @@
-#!/usr/bin/env node
-
-const [, , ...args] = process.argv
+module.exports = mockServer;
 
 //imports
 const express = require('express');
@@ -74,7 +72,7 @@ const cliColors = {
 
 var global_config, app, server;
 
-export function mockServer(config) {
+function mockServer(config) {
 
     //config
     global_config = config;
