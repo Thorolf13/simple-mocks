@@ -1,9 +1,9 @@
 # SimpleMocks
 
-Ce module a pour but d'offrir la possibilite de mettre en place des mocks facilement et rapidement.
-Il offre la possibilite de définir des mocks via des fichiers json ou a partir d'un fichier de log reseau provenant de Google Chrome (fichiers HAR).
-
-Les moficittions des fichiers mocks sont rechargées a chaud.
+Ce module a pour but d'offrir la possibilite de mettre en place des mocks facilement et rapidement.  
+Il offre la possibilite de définir des mocks via des fichiers json ou a partir d'un fichier de log reseau provenant de Google Chrome (fichiers HAR).  
+<br/>
+Les moficittions des fichiers mocks sont rechargées a chaud.  
 
 ## Utilisation
 
@@ -37,8 +37,8 @@ npm run mocks
 
 #### Configuration
 
-La configuration par défaut peut etre surchargée `mocks.json` a la racine du projet
-La synthaxe est la même que le fichier [config.json](config.json)
+La configuration par défaut peut etre surchargée `mocks.json` a la racine du projet  
+La synthaxe est la même que le fichier [config.json](config.json)  
 
 ## Configuration
 ### Fichier config.json
@@ -85,7 +85,7 @@ La synthaxe est la même que le fichier [config.json](config.json)
 
 #### Mock
 
-La priorité des réponse suit l'ordre de définition. Si la requete satisfait les criteres d'un mock, la réponse est renvoyée. Sinon, les mocks continuent d'etre testés jusqu'a la fin de la liste. Si la requete ne satisfait les criteres d'aucun mocks, une response `501 : Not Implemented` est renvoyé.
+La priorité des réponse suit l'ordre de définition. Si la requete satisfait les criteres d'un mock, la réponse est renvoyée. Sinon, les mocks continuent d'etre testés jusqu'a la fin de la liste. Si la requete ne satisfait les criteres d'aucun mocks, une response `501 : Not Implemented` est renvoyé.  
 
 ```json
 {
@@ -121,12 +121,10 @@ La priorité des réponse suit l'ordre de définition. Si la requete satisfait l
     * __body__ : _facultatif_ corps de la réponse. renseigner `null` ou omettre pour une reponse vide. Peut etre une chaine de carateres ou un objet. Si la valeur est un chaine de carateres commencant par `file://`, renvoi le contenu du fichier spécifié (chemin relatif)
 
 #### Har
-Permet de generer des mocks a partir d'un fichier `*.har` issu de Google Chrome.
-Utile pour rejouer un cas test.
-
-Le domaine présent dans les url du fichier HAR sera supprimé et remplacé par la `baseUrl` du fichier de configuration.
-
-Les entrées du fichier HAR sont prise en compte dans l'ordre inverse : du plus recent au plus ancient.
+Permet de generer des mocks a partir d'un fichier `*.har` issu de Google Chrome.  
+Utile pour rejouer un cas test.  
+Le domaine présent dans les url du fichier HAR sera supprimé et remplacé par la `baseUrl` du fichier de configuration.  
+Les entrées du fichier HAR sont prise en compte dans l'ordre inverse : du plus recent au plus ancient.  
 
 ```json
 {
