@@ -1,3 +1,7 @@
+#!/usr/bin/env node
+
+const [, , ...args] = process.argv
+
 //imports
 const express = require('express');
 const cors = require('cors');
@@ -11,41 +15,61 @@ const harParser = require('./harParser.js')
 
 //const
 const logLevel = {
-    DEBUG: { label: "DEBUG", order: 1, colorCode: 'FgDarkGray'},
-    INFO: { label: "INFO", order: 2, colorCode: 'FgLighGray'},
-    WARN: { label: "WARN", order: 3, colorCode: 'FgYellow'},
-    ERROR: { label: "ERROR", order: 4, colorCode: 'FgRed'},
-    GLOBAL: { label: "GLOBAL", order: 100, colorCode: 'FgGreen'}
+    DEBUG: {
+        label: "DEBUG",
+        order: 1,
+        colorCode: 'FgDarkGray'
+    },
+    INFO: {
+        label: "INFO",
+        order: 2,
+        colorCode: 'FgLighGray'
+    },
+    WARN: {
+        label: "WARN",
+        order: 3,
+        colorCode: 'FgYellow'
+    },
+    ERROR: {
+        label: "ERROR",
+        order: 4,
+        colorCode: 'FgRed'
+    },
+    GLOBAL: {
+        label: "GLOBAL",
+        order: 100,
+        colorCode: 'FgGreen'
+    }
 }
 
 const cliColors = {
-    Reset : "\x1b[0m",
-    Bright : "\x1b[1m",
-    Dim : "\x1b[2m",
-    Underscore : "\x1b[4m",
-    Blink : "\x1b[5m",
-    Reverse : "\x1b[7m",
-    Hidden : "\x1b[8m",
+    Reset: "\x1b[0m",
+    Bright: "\x1b[1m",
+    Dim: "\x1b[2m",
+    Underscore: "\x1b[4m",
+    Blink: "\x1b[5m",
+    Reverse: "\x1b[7m",
+    Hidden: "\x1b[8m",
 
-    FgBlack : "\x1b[30m",
-    FgRed : "\x1b[31m",
-    FgGreen : "\x1b[32m",
-    FgYellow : "\x1b[33m",
-    FgBlue : "\x1b[34m",
-    FgMagenta : "\x1b[35m",
-    FgCyan : "\x1b[36m",
-    FgLighGray : "\x1b[37m",
-    FgDarkGray : "\x1b[90m",
-    FgWhite : "\x1b[97m",
+    FgBlack: "\x1b[30m",
+    FgRed: "\x1b[31m",
+    FgGreen: "\x1b[32m",
+    FgYellow: "\x1b[33m",
+    FgBlue: "\x1b[34m",
+    FgMagenta: "\x1b[35m",
+    FgCyan: "\x1b[36m",
+    FgLighGray: "\x1b[37m",
+    FgDarkGray: "\x1b[90m",
+    FgWhite: "\x1b[97m",
 
-    BgBlack : "\x1b[40m",
-    BgRed : "\x1b[41m",
-    BgGreen : "\x1b[42m",
-    BgYellow : "\x1b[43m",
-    BgBlue : "\x1b[44m",
-    BgMagenta : "\x1b[45m",
-    BgCyan : "\x1b[46m",
-    BgWhite : "\x1b[47m"
+    BgBlack: "\x1b[40m",
+    BgRed: "\x1b[41m",
+    BgGreen: "\x1b[42m",
+    BgYellow: "\x1b[43m",
+    BgBlue: "\x1b[44m",
+    BgMagenta: "\x1b[45m",
+    BgCyan: "\x1b[46m",
+    BgWhite: "\x1b[47m"
 }
 
 //config
@@ -58,15 +82,17 @@ var app;
 var server = loadServer();
 
 //reload if config change
-fs.watch(global_config.mocks_dir, {recursive:true}, debounce(function(event, file) {
-    LOG(logLevel.GLOBAL, "reload server due to ["+event+"], file : "+ JSON.stringify(file));
+fs.watch(global_config.mocks_dir, {
+    recursive: true
+}, debounce(function(event, file) {
+    LOG(logLevel.GLOBAL, "reload server due to [" + event + "], file : " + JSON.stringify(file));
     console.log(" ");
     if (server && server.close) {
         server.close();
     }
 
     server = loadServer();
-}, 500 ));
+}, 500));
 
 
 
@@ -81,14 +107,14 @@ fs.watch(global_config.mocks_dir, {recursive:true}, debounce(function(event, fil
 //functions
 //##############################################
 
-function debounce(callback, time, checkArgs){
+function debounce(callback, time, checkArgs) {
     var list = {};
 
-    return function(){
+    return function() {
         var args = arguments;
         var argsStr = checkArgs === true ? hash(JSON.stringify(args)) : "0";
-        if( !list[argsStr] ){
-            list[argsStr] = setTimeout(function(){
+        if (!list[argsStr]) {
+            list[argsStr] = setTimeout(function() {
                 delete list[argsStr];
                 callback.apply(null, args);
             });
@@ -98,15 +124,17 @@ function debounce(callback, time, checkArgs){
 
 var hash = function(s) {
     /* Simple hash function. */
-    var a = 1, c = 0, h, o;
+    var a = 1,
+        c = 0,
+        h, o;
     if (s) {
         a = 0;
         /*jshint plusplus:false bitwise:false*/
         for (h = s.length - 1; h >= 0; h--) {
             o = s.charCodeAt(h);
-            a = (a<<6&268435455) + o + (o<<14);
+            a = (a << 6 & 268435455) + o + (o << 14);
             c = a & 266338304;
-            a = c!==0?a^c>>21:a;
+            a = c !== 0 ? a ^ c >> 21 : a;
         }
     }
     return String(a);
@@ -143,7 +171,7 @@ function loadMocks() {
     LOG(logLevel.DEBUG, "read mocks in " + global_config.mocks_dir);
     var files = fs.readdirSync(global_config.mocks_dir)
     files.forEach(file => {
-        if( !/\.json$/.test(file) ){
+        if (!/\.json$/.test(file)) {
             return;
         }
         var filePath = global_config.mocks_dir + "/" + file;
@@ -160,22 +188,21 @@ function loadMock(mock_config) {
     if (mock_config.enable !== false) {
         LOG(logLevel.INFO, "load mock : '" + mock_config.name + "'");
 
-        if( mock_config.har && !mock_config.mock ){
+        if (mock_config.har && !mock_config.mock) {
             mock_config.mock = [];
         }
 
         var mocks = [].concat(mock_config.mock);
 
-        for( var j in mock_config.har ){
+        for (var j in mock_config.har) {
             var har_config = mock_config.har[j];
             var harFilePath = global_config.mocks_dir + "/" + har_config.filePath;
 
-            try{
+            try {
                 LOG(logLevel.DEBUG, "read file " + harFilePath);
                 var harRoutes = harParser.parse(harFilePath, har_config.options);
-            }
-            catch(e){
-                LOG(logLevel.ERROR, "Error when load HAR file : "+harFilePath);
+            } catch (e) {
+                LOG(logLevel.ERROR, "Error when load HAR file : " + harFilePath);
                 LOG(logLevel.ERROR, e);
                 continue;
             }
@@ -216,48 +243,47 @@ function loadMock(mock_config) {
                     }
 
                     LOG(logLevel.INFO, "receive : " + req.method + " - " + req.originalUrl + " | response : " + route.response.code);
-                    LOG(logLevel.DEBUG,"request headers : "+JSON.stringify(req.headers));
-                    LOG(logLevel.DEBUG,"request pathParams : "+JSON.stringify(req.params));
-                    LOG(logLevel.DEBUG,"request queryParams : "+JSON.stringify(req.query));
-                    LOG(logLevel.DEBUG,"request body : "+JSON.stringify(req.body));
+                    LOG(logLevel.DEBUG, "request headers : " + JSON.stringify(req.headers));
+                    LOG(logLevel.DEBUG, "request pathParams : " + JSON.stringify(req.params));
+                    LOG(logLevel.DEBUG, "request queryParams : " + JSON.stringify(req.query));
+                    LOG(logLevel.DEBUG, "request body : " + JSON.stringify(req.body));
 
 
                     var headers = route.response.headers || {};
                     var cors = mock_config.cors || {};
 
-                    var responseHeaders =  Object.assign({},headers, cors);
+                    var responseHeaders = Object.assign({}, headers, cors);
 
-                    if (Object.keys(responseHeaders).length ) {
+                    if (Object.keys(responseHeaders).length) {
                         res.set(responseHeaders);
                     }
 
                     var body = route.response.body;
                     if (typeof body == 'string' && body.indexOf('file://') == 0) {
                         var filePath = global_config.mocks_dir + '/' + body.slice(7);
-                        LOG(logLevel.DEBUG, "response code : "+route.response.code+", response body from '" + filePath + "'");
+                        LOG(logLevel.DEBUG, "response code : " + route.response.code + ", response body from '" + filePath + "'");
 
                         res.status(route.response.code || 200).sendFile(path.resolve(filePath));
-                    }
-                    else {
-                        LOG(logLevel.DEBUG, "response code : "+route.response.code+", response body '" +(typeof body == "string" ? body : JSON.stringify(body))+ "'");
+                    } else {
+                        LOG(logLevel.DEBUG, "response code : " + route.response.code + ", response body '" + (typeof body == "string" ? body : JSON.stringify(body)) + "'");
                         res.status(route.response.code || 200).send(body);
                     }
                 };
             })(route));
 
             var queryParams = [];
-            if( route.queryParams ){
-                for( var key in route.queryParams ){
-                    queryParams.push(key+"="+route.queryParams[key]);
+            if (route.queryParams) {
+                for (var key in route.queryParams) {
+                    queryParams.push(key + "=" + route.queryParams[key]);
                 }
             }
-            var queryParamsString = queryParams.length ? "?"+queryParams.join("&") : ""
+            var queryParamsString = queryParams.length ? "?" + queryParams.join("&") : ""
 
-            LOG(logLevel.INFO, "    " + padRight(route.method.toUpperCase(), 6) + " - /" + mock_config.baseUrl + '/' + route.url + queryParamsString +" | response : " + route.response.code);
-			if( route.pathParams )
-				LOG(logLevel.DEBUG, "    " + "pathParams : " + Object.keys(route.pathParams).map(key=>":"+key+"="+route.pathParams[key]).join(","));
-			if( route.headers )
-				LOG(logLevel.DEBUG, "    " + "headers : " + Object.keys(route.headers).map(key=>key+"="+route.headers[key]).join(","));
+            LOG(logLevel.INFO, "    " + padRight(route.method.toUpperCase(), 6) + " - /" + mock_config.baseUrl + '/' + route.url + queryParamsString + " | response : " + route.response.code);
+            if (route.pathParams)
+                LOG(logLevel.DEBUG, "    " + "pathParams : " + Object.keys(route.pathParams).map(key => ":" + key + "=" + route.pathParams[key]).join(","));
+            if (route.headers)
+                LOG(logLevel.DEBUG, "    " + "headers : " + Object.keys(route.headers).map(key => key + "=" + route.headers[key]).join(","));
         }
     } else {
         LOG(logLevel.DEBUG, "mock '" + mock_config.name + "' disabled");
@@ -274,15 +300,15 @@ function padRight(str, length, char) {
 }
 
 function LOG(level, message) {
-    if( level.order < logLevel[global_config.log_level].order){
+    if (level.order < logLevel[global_config.log_level].order) {
         return;
     }
 
     var color = cliColors[level.colorCode] || cliColors.Reset;
 
-    console.log(color+"[" + (new Date().toLocaleString()) + "] " + level.label + " : " + message + cliColors.Reset);
+    console.log(color + "[" + (new Date().toLocaleString()) + "] " + level.label + " : " + message + cliColors.Reset);
 }
 
 function requireJSON(filePath) {
-  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+    return JSON.parse(fs.readFileSync(filePath, "utf8"));
 }
